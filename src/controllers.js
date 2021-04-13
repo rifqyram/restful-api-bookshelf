@@ -75,16 +75,91 @@ const addBookController = (req, h) => {
     return response;
 };
 
-const getAllBookController = () => ({
-    status: 'success',
-    data: {
-        books: books.map((book) => ({
-            id: book.id,
-            name: book.name,
-            publisher: book.publisher,
-        })),
-    },
-});
+const getAllBookController = (req) => {
+    const { name, finished, reading } = req.query;
+
+    const parseFinished = parseFloat(finished);
+
+    if (req.query) {
+        if (parseFinished === 1) {
+            return {
+                status: 'success',
+                data: {
+                    books: books.filter((n) => n.finished === true)
+                        .map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher,
+                        })),
+                },
+            };
+        }
+        if (parseFinished === 0) {
+            return {
+                status: 'success',
+                data: {
+                    books: books.filter((n) => n.finished === false)
+                        .map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher,
+                        })),
+                },
+            };
+        }
+        if (reading) {
+            return {
+                status: 'success',
+                data: {
+                    books: books.filter((n) => n.reading === true)
+                        .map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher,
+                        })),
+                },
+            };
+        }
+        if (!reading) {
+            return {
+                status: 'success',
+                data: {
+                    books: books.filter((n) => n.reading === false)
+                        .map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher,
+                        })),
+                },
+            };
+        }
+        if (name) {
+            const term = name;
+            return {
+                status: 'success',
+                data: {
+                    books: books.filter((book) => book.name.toLowerCase().indexOf(term))
+                        .map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher,
+                        })),
+                },
+            };
+        }
+    }
+
+    return {
+        status: 'success',
+        data: {
+            books: books.map((book) => ({
+                id: book.id,
+                name: book.name,
+                publisher: book.publisher,
+            })),
+        },
+    };
+};
 
 const getBookByIdController = (req, h) => {
     const { bookId } = req.params;
