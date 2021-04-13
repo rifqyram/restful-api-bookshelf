@@ -34,11 +34,21 @@ const routes = [
         method: 'GET',
         path: '/books',
         handler: getAllBookController,
+        options: {
+            cors: {
+                origin: ['*'],
+            },
+        },
     },
     {
         method: 'GET',
         path: '/books/{bookId}',
         handler: getBookByIdController,
+        options: {
+            cors: {
+                origin: ['*'],
+            },
+        },
     },
     {
         method: 'PUT',
@@ -66,6 +76,11 @@ const routes = [
         method: 'DELETE',
         path: '/books/{bookId}',
         handler: deleteBookController,
+        options: {
+            cors: {
+                origin: ['*'],
+            },
+        },
     },
 ];
 
